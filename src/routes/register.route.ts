@@ -1,10 +1,9 @@
-// src/routes/register.route.ts
 import express from 'express';
-import { handleRegister } from '../controllers/register.controller';
+import { handleRegister, handleUpdateRegister } from '../controllers/register.controller';
 
 const router = express.Router();
 
-// ✅ Correct usage — this is a route handler, not middleware
 router.post('/register', handleRegister);
+router.patch('/register', handleUpdateRegister);
 
 export default router;
