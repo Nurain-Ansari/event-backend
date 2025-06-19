@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import Register, { RegisterType } from '../models/Register.model';
 
 export const handleRegister = async (req: Request, res: Response) => {
@@ -19,39 +19,37 @@ export const handleRegister = async (req: Request, res: Response) => {
   }
 };
 
-export const handleUpdateRegister = async (req: Request, res: Response) => {
+export const handleUpdateRegister = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const formData = req.body;
 
     if (!formData._id) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: 'Registration ID does not exist',
       });
+      return;
     }
 
     const registration = await Register.findById(formData._id);
 
     if (!registration) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: 'No registration found with provided ID',
       });
+      return;
     }
 
     Object.assign(registration, formData);
     await registration.save();
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       message: 'Registration updated successfully',
       data: registration,
     });
   } catch (error) {
-    console.error('Update error:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Something went wrong while updating registration',
-    });
+    return next(error);
   }
 };

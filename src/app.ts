@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
@@ -8,11 +8,22 @@ dotenv.config();
 
 const app = express();
 
-// Use Helmet middleware
+// Middlewares
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
+// Routes
 app.use('/api', registerRouter);
+
+// Error handler (must be last)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
+  console.error('Internal server error:', err.message);
+  res.status(500).json({
+    success: false,
+    message: err.message || 'Something went wrong',
+  });
+});
 
 export default app;
