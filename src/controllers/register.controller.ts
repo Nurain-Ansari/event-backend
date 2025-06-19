@@ -53,3 +53,17 @@ export const handleUpdateRegister = async (req: Request, res: Response, next: Ne
     return next(error);
   }
 };
+
+export const handleGetAllRegister = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = await Register.find();
+
+    res.status(200).json({
+      success: true,
+      message: 'Retrive all registration successfully',
+      data,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
