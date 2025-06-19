@@ -4,11 +4,12 @@ import {
   handleRegister,
   handleUpdateRegister,
 } from '../controllers/register.controller';
+import { verifyAdmin } from '../middlewares/auth.middleware';
 
 const router = express.Router();
 
 router.post('/register', handleRegister);
-router.patch('/register', handleUpdateRegister);
-router.get('/register', handleGetAllRegister);
+router.patch('/register', verifyAdmin, handleUpdateRegister);
+router.get('/register', verifyAdmin, handleGetAllRegister);
 
 export default router;
