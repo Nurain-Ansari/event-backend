@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 
-export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => {
+export const checkAdminAccess = (req: Request, res: Response) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Basic ')) {
@@ -10,10 +10,13 @@ export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => 
 
   const base64Credentials = authHeader.split(' ')[1];
   const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
-  console.log('credentials: ', credentials);
   const [email, password] = credentials.split(':');
+
   if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-    next(); // ✅ allowed
+    res.status(200).json({
+      success: true,
+      message: 'Admin verified successfully',
+    });
     return;
   }
 

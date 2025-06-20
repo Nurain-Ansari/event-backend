@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
 import registerRouter from './routes/register.route';
+import authRouter from './routes/auth.route';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api', registerRouter);
+app.use('/api', authRouter);
 
 // Error handler (must be last)
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
