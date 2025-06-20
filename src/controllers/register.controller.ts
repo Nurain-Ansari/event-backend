@@ -67,3 +67,39 @@ export const handleGetAllRegister = async (req: Request, res: Response, next: Ne
     return next(error);
   }
 };
+
+export const handleGetRegisterByBarcodeId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id: barcodeId } = req.params;
+
+    if (!barcodeId) {
+      res.status(400).json({
+        success: false,
+        message: 'Please provide barcode ID',
+      });
+      return;
+    }
+
+    const data = await Register.findOne({ barcodeId });
+
+    if (!data) {
+      res.status(404).json({
+        success: false,
+        message: 'No registration found for the provided ID',
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Retrieved data successfully',
+      data,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
