@@ -10,7 +10,6 @@ export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => 
 
   const base64Credentials = authHeader.split(' ')[1];
   const credentials = Buffer.from(base64Credentials, 'base64').toString('ascii');
-  console.log('credentials: ', credentials);
   const [email, password] = credentials.split(':');
   if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
     next(); // ✅ allowed
